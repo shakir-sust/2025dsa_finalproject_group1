@@ -8,7 +8,7 @@ This repository is for the final ML (Machine Learning) project for "CRSS 8030 - 
 
 # Collaborators
 
-Collaborators are listed below:
+Collaborators are listed below in alphabetical order:
 
 - Md Shakir Moazzem (PhD student in Food Science)
 - Umar Munir (PhD student in Crop and Soil Science)

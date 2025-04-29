@@ -218,7 +218,47 @@ meta_test_clean
 ```
 
 
+## EDA for cleaned data
 
+The following code chunk will conduct EDA for cleaned data.
+
+```{r}
+summary(trait_clean)
+
+summary(soil_clean)
+
+summary(meta_clean)
+
+summary(submission_test_clean)
+
+summary(soil_test_clean)
+
+summary(meta_test_clean)
+
+```
+
+
+## Merging all 3 cleaned data frames for training data
+
+The following code chunk will merge all 3 cleaned data frames for training data.
+
+```{r}
+
+merged_train <- trait_clean %>%
+  left_join(soil_clean, by = c("year","site")) %>%
+  left_join(meta_clean, by = c("year","site"))
+
+
+merged_test <- submission_test_clean %>%
+  left_join(soil_test_clean, by = c("year","site")) %>%
+  left_join(meta_test_clean, by = c("year","site"))
+
+
+merged_all <- bind_rows(merged_train, merged_test)
+
+merged_all
+
+```
 
 
 

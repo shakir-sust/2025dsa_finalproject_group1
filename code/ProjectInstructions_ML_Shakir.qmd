@@ -5,7 +5,7 @@ format:
     embed-resources: true
     toc: true
     theme: cerulean
-author: FIRST LAST
+authors: Md Shakir Moazzem, Umar Munir
 ---
 
 # A. Introduction  

@@ -116,6 +116,51 @@ weather_test_rf
 
  
  
+### b. Distribution of target variable "yield"
+
+The following code chunk will create a density plot to compare target variable "yield" in the training and test set.
+
+```{r distribution, message=F, warning=F}
+ggplot() +
+  geom_density(data = weather_train_rf, 
+               aes(x = yield),
+               color = "red") +
+  geom_density(data = weather_test_rf, 
+               aes(x = yield),
+               color = "blue") 
+  
+```
+
+
+### c. Data processing with recipe
+
+The following code chunk will conduct data processing with recipe.
+
+```{r weather_recipe}
+weather_recipe_rf <-
+  # Defining predicted and predictor variables
+  recipe(yield ~ .,
+         data = weather_train_rf) %>%
+  # Removing year, site, hybrid, and non-growing season  
+    step_rm(year, 
+            site, 
+            hybrid,
+            matches("Jan|Feb|Mar|Nov|Dec")) 
+  
+weather_recipe_rf
+```
+
+
+The following code chunk will prep the recipe to estimate any required statistics.
+
+```{r weather_prep}
+
+weather_prep_rf <- weather_recipe_rf %>%
+  prep()
+
+weather_prep_rf
+```
+
  
  
  

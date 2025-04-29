@@ -125,3 +125,24 @@ submission_test_clean
 ```
 
 
+The following code chunks will conduct data wrangling on  "training_soil.csv"
+
+
+```{r data_wrangling_training_soil, message=F, warning=F}
+
+soil_clean <- soil_df %>%
+  mutate(
+    # 1) remove all lowercase letters
+    site = str_remove_all(site, "[a-z]"),
+    # 2) keep only text before any dash
+    site = str_replace(site, "-.*$", ""),
+    # 3) keep only text before any underscore
+    site = str_replace(site, "_.*$", "")
+  ) %>%
+  ungroup()
+
+soil_clean
+```
+
+
+

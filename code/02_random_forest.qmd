@@ -50,3 +50,47 @@ library(finetune)
 
 ```
  
+ 
+ ## Data import
+
+The following code chunk will import the finali wrangled  data file i.e., "weather_monthsum.csv".
+
+```{r import, message=F, warning=F}
+# Going to do some wrangling on the go with the file
+weather_rf <- read_csv("../data/weather_monthsum.csv") %>%
+  rename(yield = adjusted_yield) 
+
+weather_rf
+
+#view(weather_rf)
+
+
+```
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

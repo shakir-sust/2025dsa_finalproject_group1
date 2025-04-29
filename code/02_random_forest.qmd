@@ -1,0 +1,52 @@
+---
+title: "Data Science Applied to Ag - Final Project - ML"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    theme: cerulean
+author: Md Shakir Moazzem, Umar Munir
+---
+# Introduction  
+
+This script contains ML Workflow with random forest. 
+
+# Setup  
+## Install and Load relevant packages  
+
+The following code chunk will load necessary packages.
+
+```{r Setup, message=F, warning=F}
+
+# Installing packages
+
+#install.packages("tidyverse")
+#install.packages("readxl")
+#install.packages("janitor")
+#install.packages("dplyr")
+#install.packages("tidyr")
+#install.packages("readr")
+#install.packages("lubridata")
+#install.packages("stringr")
+#install.packages("ranger") 
+#install.packages("vip")
+#install.packages("ranger")
+#install.packages("finetune")
+
+# Loading packages 
+
+library(readxl) 
+library(janitor) 
+library(dplyr) 
+library(tidyr) 
+library(readr) 
+library(lubridate)
+library(stringr)
+library(tidymodels)
+library(tidyverse) 
+library(vip)
+library(ranger)
+library(finetune)
+
+```
+ 

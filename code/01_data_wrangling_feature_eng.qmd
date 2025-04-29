@@ -1,0 +1,46 @@
+---
+title: "Data Science Applied to Ag - Final Project - ML"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    theme: cerulean
+author: Md Shakir Moazzem, Umar Munir
+---
+
+# Introduction  
+
+This script contains the data wrangling and feature engineering steps for the final project.
+
+# Start of data wrangling
+
+## Loading packages  
+
+The following code chunk will load necessary packages.
+
+```{r Setup, message=F}
+
+# Installing packages
+
+#install.packages("tidyverse")
+#install.packages("readxl")
+#install.packages("janitor")
+#install.packages("dplyr")
+#install.packages("tidyr")
+#install.packages("readr")
+#install.packages("lubridata")
+#install.packages("stringr")
+
+# Loading packages 
+
+library(tidyverse)
+library(readxl) # to read excel files
+library(janitor) # to clean data; helps fix and standardize the column names
+library(dplyr) # wrangling
+library(tidyr) # wrangling
+library(readr) # to export csv
+library(lubridate)
+library(stringr)
+
+```
+

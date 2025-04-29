@@ -314,7 +314,19 @@ vip(rf_model, num_features = 20) +
 ```
 
  
- 
+##5. Combining with submission
+```{r}
+
+pred_2024_final <- read.csv("../output/rf_predicted_2024_yields.csv") 
+test_submission <- read.csv("../data/testing/testing_submission.csv")
+
+pred_2024_filtered <- pred_2024_final %>%
+  distinct(year, site, hybrid, .keep_all = TRUE) %>%
+  semi_join(test_submission, by = c("year", "site", "hybrid"))
+
+pred_2024_filtered
+
+#write.csv(pred_2024_filtered, "randomforest_yieldprediction_2024.csv") 
  
  
  

@@ -162,7 +162,36 @@ weather_prep_rf
 ```
 
  
- 
+## 2. Training
+
+### a. Model specification
+
+The following code chunk will conduct model specification.
+  
+```{r rf_spec}
+
+rf_spec <- 
+  # Specifying random forest as our model type, asking to tune the hyperparameters
+  rand_forest(trees = tune(),
+              mtry = tune() 
+              ) %>%
+    # Specify the engine (= package)
+    set_engine("ranger") %>% #specifying "ranger" as the engine/package to run random forest 
+    # Specifying mode  
+    set_mode("regression") #random forest can handle both regression (when y is numerical) and classification (when y is categorical) #Here, we are specifying "set_mode("regression")" because our y variable is numerical [continuous]
+
+rf_spec
+
+```
+
+```{r}
+# 5. Bundle into a workflow
+library(workflows)
+rf_wf <- workflow() %>%
+  add_recipe(weather_recipe_rf) %>%
+  add_model(rf_spec)
+```
+
  
  
  

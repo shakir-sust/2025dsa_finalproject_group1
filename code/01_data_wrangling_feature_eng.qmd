@@ -44,3 +44,37 @@ library(stringr)
 
 ```
 
+## Reading "training" data  
+
+The following code chunk will read the csv files for the 3 training data sets
+
+```{r training data import, message=F, warning=F}
+
+#reading the csv files for the 3 training data sets 
+
+trait_df <- read_csv("../data/training/training_trait.csv") 
+meta_df  <- read_csv("../data/training/training_meta.csv")
+soil_df  <- read_csv("../data/training/training_soil.csv")
+
+submission_test <- read_csv("../data/testing/testing_submission.csv")
+soil_test <- read_csv("../data/testing/testing_soil.csv")
+meta_test <- read_csv("../data/testing/testing_meta.csv")
+
+
+```
+
+
+## Data wrangling on "training" data
+
+The code below creates a function to adjust the yield_mg_ha for 15.5% grain moisture.
+
+```{r}
+
+# Function to transform yield to 15.5% moisture
+adjust_yield <- function(yield_mg_ha, grain_moisture) {
+  yield_mg_ha * (100 - grain_moisture) / (100 - 15.5)
+}
+
+```
+
+

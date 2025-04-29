@@ -166,5 +166,49 @@ weather_test_xgb
 
 ```
 
+# Comparing the distribution of "yield" in training vs. test sets
+
+The following code chunk will compare the distribution of "yield" in training vs. test sets.
+
+```{r distribution_with_legend, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(dplyr)
+
+# 1. Combine train and test with a new 'dataset' column
+yield_df <- bind_rows(
+  weather_train_xgb %>% mutate(dataset = "Training"),
+  weather_test_xgb  %>% mutate(dataset = "Test")
+)
+
+# 2. Plot densities with a legend
+ggplot(yield_df, aes(x = yield, color = dataset)) +
+  geom_density(size = 1) +
+  scale_color_manual(
+    values = c(Training = "red", Test = "blue"),
+    name = "Data split"
+  ) +
+  labs(
+    title = "Distribution of Yield",
+    x = "Yield (Mg/ha)",
+    y = "Density"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    legend.position = "top"
+  )
+```
+
+The following code chunk will export "yield_df.csv"
+
+```{r}
+
+write_csv(yield_df,
+          "../data/yield_df.csv")
+
+```
+
 
 

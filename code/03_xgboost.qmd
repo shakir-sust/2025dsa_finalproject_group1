@@ -371,5 +371,47 @@ final_xgb_fit
 
 ```
 
+# Stopping parallel processing
+
+The following code chunk will stop parallel processing.
+
+```{r}
+
+# Stopping parallel 
+stopCluster(cl)
+
+```
+
+# Evaluation on held-out test set 
+
+The following code chunk will conduct evaluation on the held-out test set.
+
+```{r evaluate, message=FALSE, warning=FALSE}
+
+# Generating predictions and re-attach the true yield column
+test_preds_xgb <- predict(final_xgb_fit, new_data = weather_test_xgb) %>%
+  bind_cols(weather_test_xgb)
+
+# Computing RMSE and R2 using yardstick (specify data = so `yield` is found)
+rmse_res <- rmse(
+  data = test_preds_xgb,
+  truth = yield,    # the observed values
+  estimate = .pred     # the predicted values
+)
+
+rsq_res <- rsq(
+  data = test_preds_xgb,
+  truth = yield,
+  estimate = .pred
+)
+
+# Combining and printing
+test_metrics <- bind_rows(rmse_res, rsq_res)
+print(test_metrics)
+
+```
+
+
+
 
 

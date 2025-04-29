@@ -79,7 +79,41 @@ weather_to_predict <- weather_rf %>% filter(is.na(yield)) #prediction
 weather_complete     <- weather_rf %>% filter(!is.na(yield))
 ```
 
- 
+## a. Data split  
+
+
+```{r}
+# Initial data split (70/30) on the known data (2014-2023)
+set.seed(931735)
+weather_split_rf <- initial_split(
+  weather_complete,
+  prop   = 0.7,
+  strata = yield
+)
+
+```
+
+
+
+The following code chunk will conduct setting train set.
+
+```{r weather_train, message=F, warning=F}
+# Setting train set 
+weather_train_rf <- training(weather_split_rf)
+
+weather_train_rf
+```
+
+The following code chunk will conduct setting test split.
+
+
+```{r weather_test, message=F, warning=F}
+# Setting test split
+weather_test_rf <- testing(weather_split_rf)
+
+weather_test_rf
+```
+
  
  
  

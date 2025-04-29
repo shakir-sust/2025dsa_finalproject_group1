@@ -505,6 +505,73 @@ write_csv(vi_top20,
 
 ```
 
+# Predicting 2024 yields
+
+The following code chunks will predict 2024 yields.
+
+```{r}
+
+pred_2024_xgb <- predict(final_xgb_fit, weather_to_predict) %>%  # prediction
+  bind_cols(weather_to_predict) # attach IDs
+
+pred_2024_xgb
+
+View(pred_2024_xgb)
+
+```
+
+The following code chunk will keep the year, site, hybrid, .pred columns, and then rename the ".pred" column as "yield_mg_ha".
+
+```{r}
+
+pred_2024_final <- pred_2024_xgb %>%
+  select(year, site, hybrid, .pred) %>% # keeping only those four cols
+  rename(yield_mg_ha = .pred) # renaming the prediction column
+
+pred_2024_final
+
+```
+
+# Exporting results as .csv file
+
+The following code chunk will save results and export it as a .csv file.
+
+```{r}
+
+write_csv(pred_2024_final,
+          "../data/xgb_pred_2024_final_yields.csv")
+
+```
+
+The following code chunk will import and print "testing_submission.csv" data set.
+
+```{r}
+
+testing_submission <- read_csv("../data/testing/testing_submission.csv")
+
+testing_submission
+
+```
+
+The following code chunk will sort the columns in our predicted 2024 yields inside "pred_2024_final" based on the "testing_submission".
+
+```{r}
+
+pred_2024_filtered <- pred_2024_final %>%
+  distinct(year, site, hybrid, .keep_all = TRUE) %>%
+  semi_join(testing_submission, by = c("year", "site", "hybrid"))
+
+```
+
+The following code chunk will export and save our final 2024 yield predictions on the provided "testing_submission".
+
+```{r}
+
+write_csv(pred_2024_filtered,
+          "../data/xgb_pred_2024_filtered_final_yields.csv")
+
+```
+
 
 
 

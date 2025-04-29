@@ -410,6 +410,41 @@ weather_daymet_all
 ```
 
 
+The following code chunk will unnest the "weather_daymet_all" data.
+
+```{r}
+
+daymet_all_unnest <- weather_daymet_all %>%
+  unnest(weather) %>% 
+  pivot_wider(names_from = measurement, 
+              values_from = value) %>% 
+  janitor::clean_names() 
+
+daymet_all_unnest
+
+
+
+
+```
+
+The following code chunk will export and save the "fieldweatherdata.csv" data.
+
+```{r}
+
+write_csv(daymet_all_unnest,
+          "../data/fieldweatherdata.csv"
+          )
+```
+
+The following code chunk will import the "fieldweatherdata.csv" data and assign it to "fieldweather" object.
+
+```{r}
+
+fieldweather <- read_csv("../data/fieldweatherdata.csv")
+
+fieldweather
+
+```
 
 
 

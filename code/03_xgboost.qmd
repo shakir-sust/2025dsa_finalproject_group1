@@ -300,3 +300,76 @@ xgb_grid <- grid_latin_hypercube(
 xgb_grid
 
 ```
+
+# Registering a parallel cluster
+
+The following code chunk will create and register a parallel cluster.
+
+```{r}
+
+# Parallel backend 
+
+cl <- makePSOCKcluster(detectCores() - 1)
+registerDoParallel(cl)
+
+```
+
+# Racing tune via ANOVA
+
+The following code chunk will conduct racing tune via ANOVA
+
+```{r}
+
+# Racing tune via ANOVA 
+
+set.seed(76544) # reproducible tuning
+
+xgb_race_res <- tune_race_anova(
+  object = xgb_spec, # model spec to tune
+  preprocessor = weather_recipe_xgb, # recipe to apply
+  resamples = resamples_xgb, # cross-validation object
+  grid = xgb_grid, # hyperparameter grid
+  control = control_race(save_pred = TRUE) # saving predictions
+)
+
+beepr::beep()
+
+xgb_race_res
+xgb_race_res$.metrics[[2]]
+
+```
+
+# Selecting best hyperparameters
+
+The following code chunk will select best hyperparameters.
+
+```{r}
+
+# Select best parameters 
+
+best_params_xgb <- xgb_race_res %>%
+  select_best(metric = "rmse") %>% # choosing by RMSE
+   mutate(source = "best_rmse")
+
+best_params_xgb
+
+```
+
+# Finalizing workflow & fitting full training set
+
+The following code chunk will finalize workflow & fit full training set.
+
+```{r}
+
+# Finalize workflow & fit on full training set 
+
+final_xgb_wf  <- finalize_workflow(xgb_wf, best_params_xgb) # plugging in best params
+final_xgb_wf
+
+final_xgb_fit <- fit(final_xgb_wf, data = weather_train_xgb) # training on all 2014–2023 data
+final_xgb_fit
+
+```
+
+
+

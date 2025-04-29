@@ -55,3 +55,67 @@ library(beepr)
 library(yardstick)  
 
 ```
+
+# Loading the data set
+
+The following code chunk will load the "weather_monthsum.csv" data set.
+
+```{r weather}
+
+# Data import 
+
+weather_xgb <- read_csv("../data/weather_monthsum.csv") %>%
+  rename(yield = adjusted_yield)
+
+weather_xgb
+
+```
+
+# EDA plots on soil predictors
+
+The following code chunk will create EDA plots on soil predictors.
+
+```{r ridge_soil_selected_fixed, message=FALSE, warning=FALSE}
+
+library(ggridges)   
+library(viridis)    
+library(purrr)       
+library(ggplot2)  
+
+var_labels <- c(
+  soilpH = "soil pH",
+  om_pct = "soil organic matter"
+)
+
+walk2(
+  names(var_labels),    
+  var_labels,           
+  function(var, label) {
+    # computing density to normalize height
+    dens <- density(weather_xgb[[var]], na.rm = TRUE)
+    scale_val <- 1 / max(dens$y, na.rm = TRUE)
+    
+    # building the ggplot object
+    p <- ggplot(weather_xgb, aes(x = .data[[var]], y = label, fill = stat(x))) +
+      geom_density_ridges_gradient(
+        scale = scale_val,
+        rel_min_height = 0.01
+      ) +
+      scale_fill_viridis_c(option = "C") +
+      labs(
+        title = paste("Distribution of", label),
+        x = "Mean soil pH between 2014 - 2024",
+        y = NULL
+      ) +
+      theme_ridges() +
+      theme(
+        legend.position = "none",
+        axis.text.y = element_blank()
+      )
+    print(p)
+  }
+)
+
+```
+
+

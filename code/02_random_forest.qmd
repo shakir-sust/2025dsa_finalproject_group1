@@ -225,7 +225,41 @@ beepr::beep()
 ```
 
 
- 
+ ```{r rmse based best model}
+# Selecting the best hyperparameters by RMSE
+best_params <- rf_tune_res %>% 
+  select_by_pct_loss("trees",
+                     metric = "rmse",
+                     limit = 2)
+
+```
+
+
+
+
+
+```{r workflow finalizaiton}
+# Finalizing the workflow
+final_rf_wf <- finalize_workflow(rf_wf, best_params)
+
+# Fitting on all of the training data (70% of the data split)
+final_rf_fit <- fit(final_rf_wf, data = weather_train_rf)
+```
+
+
+
+```{r}
+# Evaluating on the held‐out test set (30% of the data split)
+library(yardstick)
+test_preds <- predict(final_rf_fit, weather_test_rf) %>%
+  bind_cols(weather_test_rf)
+test_preds %>%
+  rmse(truth = yield, estimate = .pred) %>%
+  bind_rows(
+    rsq(test_preds, truth = yield, estimate = .pred)
+  )
+```
+
  
  
  

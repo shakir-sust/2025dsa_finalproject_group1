@@ -106,3 +106,22 @@ trait_clean
 
 ```
 
+The following code chunks will conduct data wrangling on "trait_clean"
+
+```{r}
+
+submission_test_clean <- submission_test %>%
+  mutate(
+    site = str_remove_all(site, "[a-z]"), # removing all lowercase letters from site
+    site = str_replace(site, "-.*$", ""), # keeping only text before any dash
+    site = str_replace(site, "_.*$", "") # keeping only text before any underscore
+  ) %>%
+  group_by(year, site, hybrid) %>%
+  select(-yield_mg_ha) %>%
+  ungroup()
+
+submission_test_clean
+
+```
+
+

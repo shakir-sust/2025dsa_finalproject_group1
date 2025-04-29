@@ -494,6 +494,34 @@ fe_month
 ```
 
 
+The following code chunk will summarize daily weather variables based on month.  
+
+```{r fe_month_sum}
+
+fe_month_sum <- fe_month %>%
+  group_by(year, site, month_abb) %>% #If we do a summarise() after group_by(), any column that's not in the group_by() is gone, so we need to include "strength_gtex" in the group_by() to include it in the data frame because "strength_gtex" is our response variable so we must keep it in the data frame 
+  #Because we are gonna be applying a "summarize()" function to different columns, we are gonna use a function called "across()" 
+  summarise(across(.cols = c(dayl.s,
+                             srad.wm2,
+                             tmax.c,
+                             tmin.c,
+                             vp.pa),
+                   .fns = mean, #do not indicate the actual function "mean()", just use the word "mean"
+                   .names = "mean_{.col}"), #specifying the weather variables that we want their mean as new column variables #1st across() is applying the "mean" function (to summarize "mean")
+            across(.cols = prcp.mm,
+                   .fns = sum,
+                   .names = "sum_{.col}"
+                   ) #specifying the weather variable (prcp.mm) that we want its sum as new column variable #2nd across() is summarizing sum #2nd across() is applying the "sum" function (to summarize "sum")
+            ) %>%
+  ungroup() #To convert from "group" to "tibble"
+
+
+fe_month_sum
+
+#View(fe_month_sum)
+
+```
+
 
 
 

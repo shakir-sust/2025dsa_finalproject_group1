@@ -522,6 +522,21 @@ fe_month_sum
 
 ```
 
+The following code chunk will cross-check the mean of tmax.c and sum of prcp.mm for the first site-year and month. 
+
+[Note: the following code chunk is for double checking to make sure that we did everything okay the way we intended] 
+
+```{r}
+
+fe_month %>%
+  filter(year == 2014 & 
+           site == "DEH1" &
+           month_abb == "Jan") %>%
+  summarise(tmax.c = mean(tmax.c),
+            prcp.mm = sum(prcp.mm))
+
+
+```
 
 
 

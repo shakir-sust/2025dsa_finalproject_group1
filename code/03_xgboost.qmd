@@ -210,5 +210,93 @@ write_csv(yield_df,
 
 ```
 
+# Pre-processing recipe
 
+The following code chunk will conduct pre-processing recipe.
 
+```{r}
+
+# Pre-processing recipe 
+
+weather_recipe_xgb <-
+  recipe(yield ~ ., data = weather_train_xgb) %>% # targeting ~ all predictors
+  step_rm(year, site, hybrid, # dropping IDs
+          matches("Jan|Feb|Mar|Nov|Dec")) %>% # dropping off‐season months
+  step_impute_median(all_numeric_predictors()) # median imputation for NAs
+
+weather_recipe_xgb
+
+```
+
+# Model specification
+
+The following code chunk will conduct model specification.
+
+```{r}
+
+# Model specification 
+
+xgb_spec <-
+  boost_tree(
+    trees = tune(), # tuning number of boosting rounds
+    tree_depth = tune() # tuning max tree depth
+  ) %>%
+  set_engine("xgboost") %>%  # using XGBoost backend
+  set_mode("regression") # regression mode
+
+xgb_spec
+
+```
+
+# Bundle recipe & model into workflow
+
+The following code chunk will bundle recipe & model into workflow.
+
+```{r}
+
+# Workflow 
+
+xgb_wf <- workflow() %>%
+  add_recipe(weather_recipe_xgb) %>% # adding preprocessing
+  add_model(xgb_spec)  # adding XGBoost spec
+
+xgb_wf
+
+```
+
+# Resampling strategy
+
+The following code chunk will setup Resampling plan.  
+
+```{r}
+
+# Resampling setup 
+
+set.seed(34549)
+
+resamples_xgb <- vfold_cv(
+  weather_train_xgb, 
+  v = 5 # 5 folds
+  )
+
+resamples_xgb
+
+```
+
+# Hyperparameter grid search with Latin Hypercube Sampling
+
+The following code chunk will conduct hyperparameter grid search with Latin Hypercube Sampling.
+
+```{r}
+
+# Hyperparameter grid (Latin hypercube) 
+
+xgb_grid <- grid_latin_hypercube(
+  trees(), # tuning number of trees
+  tree_depth(), # tuning tree depth
+  size = 10
+)
+
+xgb_grid
+
+```

@@ -367,7 +367,47 @@ site_year_df
 ```
 
 
+The following code chunk will extract unique combinations of year, site, and their coordinates.
 
+```{r unique_site_years_with_coords}
+
+site_year_df <- merged_daymet %>%
+  select(year, site, lon, lat) %>%  # need to include longitude and latitude along with site-years
+  distinct() %>%                    
+  arrange(year, site)
+
+site_year_df
+
+```
+
+The following code chunk will download the weather data for all unique combinations of year, site, and their coordinates in the "site_year_df" object.
+
+```{r}
+
+weather_daymet_all <- site_year_df %>% 
+  mutate(weather = pmap(list(.y = year, 
+                             .site = site, 
+                             .lat = lat, 
+                             .lon = lon), 
+                        function(.y, .site, .lat, .lon) 
+                          download_daymet( 
+                            site = .site, 
+                            lat = .lat, #specifying ".lat" placeholder for "lat = " argument
+                            lon = .lon, #specifying ".lon" placeholder for "lon = " argument
+                            start = .y, 
+                            end = .y, 
+                            simplify = T,
+                            silent = T) %>% #end of " download_daymet()" function
+                          rename(.year = year,
+                                 .site = site) 
+                        )) 
+
+
+weather_daymet_all
+
+
+
+```
 
 
 

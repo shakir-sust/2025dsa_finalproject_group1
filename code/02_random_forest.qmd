@@ -261,7 +261,26 @@ test_preds %>%
 ```
 
  
- 
+ ##3. Prediction
+
+```{r}
+
+# Now I am going to make predictioin for the 2024 rows
+pred_2024 <- predict(final_rf_fit, weather_to_predict) %>%
+  bind_cols(weather_to_predict)
+
+
+# Quick Wrangling
+pred_2024_w <- pred_2024 %>% 
+  dplyr::select(year, site, hybrid, .pred) %>% 
+  rename(pred_yield_mg_ha = .pred) %>% 
+  distinct()
+
+#Final data
+pred_2024_w
+#write_csv(pred_2024_w, "predicted_2024_yields.csv")
+
+```
  
  
  

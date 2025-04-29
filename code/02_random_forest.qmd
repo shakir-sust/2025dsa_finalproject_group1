@@ -192,7 +192,39 @@ rf_wf <- workflow() %>%
   add_model(rf_spec)
 ```
 
- 
+ ###b. Hyperparameter tuning
+
+The following code chunk will conduct 3-fold cross-validation to evaluate model performance during tuning.
+
+```{r resampling_foldcv}
+set.seed(34549)
+resamples_rf <- vfold_cv(weather_train_rf, 
+                              v = 3) #becuase of limited time and computing power
+
+resamples_rf
+resamples_rf$splits[[1]]
+resamples_rf$splits[[2]]
+```
+
+
+
+
+```{r simulate annealing}
+# Tuning with simulated annealing (3 because of limited time and computational power)
+library(finetune)
+set.seed(76544)
+rf_tune_res <- tune_sim_anneal(
+  rf_wf,
+  resamples = resamples_rf,
+  iter = 3,
+  control = control_sim_anneal(save_workflow = FALSE)
+)
+
+
+beepr::beep() 
+```
+
+
  
  
  

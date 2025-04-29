@@ -1,0 +1,57 @@
+---
+title: "Data Science Applied to Ag - Final Project - ML"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    theme: cerulean
+author: Md Shakir Moazzem, Umar Munir
+---
+
+# Introduction  
+
+This script contains ML Workflow with XGBoost
+
+# Loading packages
+
+The following code chunk will load necessary packages.
+
+```{r}
+
+# 1. Setup 
+
+#install.packages("tidymodels")   # Core framework for modeling (includes recipes, workflows, parsnip, etc.)
+#install.packages("finetune")     # Additional tuning strategies (e.g., racing, ANOVA-based tuning)
+#install.packages("vip")          # For plotting variable importance from fitted models
+#install.packages("xgboost")      # XGBoost implementation in R
+#install.packages("ranger")       # Fast implementation of Random Forests
+#install.packages("tidyverse")    # Data wrangling and visualization
+#install.packages("doParallel")   # For parallel computing (useful during resampling/tuning)
+#install.packages("caret")  
+#install.packages("xgboost") #new pacakage
+#install.packages("caret")
+#install.packages("yardstick")
+
+library(tidymodels)   # Core framework for modeling (includes recipes, workflows, parsnip, etc.)
+library(finetune)     # Additional tuning strategies (e.g., racing, ANOVA-based tuning)
+library(vip)          # For plotting variable importance from fitted models
+library(xgboost)      # XGBoost implementation in R
+library(ranger)       # Fast implementation of Random Forests
+library(tidyverse)    # Data wrangling and visualization
+library(doParallel)   # For parallel computing (useful during resampling/tuning)
+library(caret)       # Other great library for Machine Learning 
+library(readr)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+library(tidymodels)
+library(xgboost)
+library(vip)
+library(finetune)
+library(doParallel)
+library(parallel)
+library(beepr)
+library(yardstick)  
+
+```

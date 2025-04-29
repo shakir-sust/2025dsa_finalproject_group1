@@ -353,7 +353,18 @@ message("Rows kept: ", nrow(merged_daymet),
 ```
 
 
+The following code chunk will extract unique combinations of year, site, and their coordinates.
 
+```{r unique_site_years_with_coords}
+
+site_year_df <- merged_daymet %>%
+  select(year, site, lon, lat) %>%  # need to include longitude and latitude along with site-years
+  distinct() %>%                    
+  arrange(year, site)
+
+site_year_df
+
+```
 
 
 

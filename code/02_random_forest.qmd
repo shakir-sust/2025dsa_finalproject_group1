@@ -327,7 +327,7 @@ pred_2024_filtered <- pred_2024_final %>%
 pred_2024_filtered
 
 #write.csv(pred_2024_filtered, "randomforest_yieldprediction_2024.csv") 
- 
+``` 
  
  
  

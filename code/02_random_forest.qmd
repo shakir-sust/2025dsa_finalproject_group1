@@ -68,6 +68,17 @@ weather_rf
 ```
  
  
+# Machine Learning workflow  
+
+## 1. Pre-processing  
+
+```{r}
+# Splitting data between known (2014-2023) and unknown (2024) containing  NA as yield values for future prediction
+weather_to_predict <- weather_rf %>% filter(is.na(yield)) #prediction
+
+weather_complete     <- weather_rf %>% filter(!is.na(yield))
+```
+
  
  
  

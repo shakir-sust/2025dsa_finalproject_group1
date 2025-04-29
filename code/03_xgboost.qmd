@@ -118,4 +118,53 @@ walk2(
 
 ```
 
+The following code chunk will export "weather_xgb.csv".
+
+```{r}
+
+write_csv(weather_xgb,
+          "../data/weather_xgb.csv")
+
+```
+
+# Splitting off 2024 for final prediction
+
+The following code chunk will split off 2024 for final prediction 
+
+```{r}
+
+# Split off 2024 for final prediction 
+
+weather_to_predict <- weather_xgb %>% filter(is.na(yield)) # holding out 2024 rows (no yield)
+weather_to_predict
+
+weather_complete <- weather_xgb %>% filter(!is.na(yield)) # keeping 2014–2023 for training
+weather_complete 
+
+```
+
+# Train/test split
+
+The following code chunk will conduct train/test split for the data of the years 2014–2023.
+
+```{r}
+
+# Train/test split (2014–2023) 
+
+set.seed(931735) # reproducible split
+
+xgb_split <- initial_split(weather_complete,  # creating split object
+                           prop = 0.7, # 70% train
+                           strata = yield) # stratifying on yield
+xgb_split
+
+weather_train_xgb <- training(xgb_split) # extracting training set
+weather_train_xgb
+
+weather_test_xgb  <- testing(xgb_split) # extracting test set
+weather_test_xgb 
+
+```
+
+
 

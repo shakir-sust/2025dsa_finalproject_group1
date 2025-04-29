@@ -448,6 +448,50 @@ fieldweather
 
 
 
+# Feature engineering
+
+## Loading packages
+
+The following code chunk will load necessary packages.
+
+```{r}
+
+#install.packages("ggridges")
+
+library(ggridges)
+library(tidyverse)
+
+```
+
+
+The following code chunk will keep desired variables that we will use further and get abbreviated month name based on the date.
+
+
+```{r fe_month}
+
+fe_month <- fieldweather %>%
+  # Selecting needed variables
+  dplyr::select(year, site, lat, lon,
+                #strength_gtex,
+                yday,
+                dayl.s = dayl_s, #to rename variable name from "dayl_s" to dayl.s
+                prcp.mm = prcp_mm_day, #to rename variable name to "prcp.mm"
+                srad.wm2 = srad_w_m_2,#to rename variable name to "srad.wm2"
+                tmax.c = tmax_deg_c, #to rename variable name to "tmax.c"
+                tmin.c = tmin_deg_c,#to rename variable name to "tmin.c"
+                vp.pa = vp_pa #to rename variable name to "vp.pa"
+                ) %>%
+  # Creating a date class variable  
+  mutate(date_chr = paste0(year, "/", yday)) %>% #The format of "date_chr" is "chr", we will change it to "date" format when we use "as.Date()" function in the next line
+  mutate(date = as.Date(date_chr, "%Y/%j")) %>% #"%Y/%j" because we used "/" in paste0(year, "/", yday) at the previous line #If instead of using "/" we used "-" in the previous line as "mutate(date_chr = paste0(year, "-", yday))", we would simply use "mutate(date = as.Date(date_chr, "%Y-%j"))" in the current line 
+  # Extracting month from date  
+  mutate(month = month(date)) %>% #we use month() function to extract only the numerical number of the month as "dbl" format (number of the month e.g., "1" for "January" etc) from an object that has the year/month/date data (i.e., "date" object that we created in the previous line) #the 1st "month" inside mutate is to name the new column, the 2nd "month" after = sign is the month() function from lubridate package #month is in "dbl" (double) format
+  mutate(month_abb = month(date, label = T)) #To get abbreviated month name e.g., Jan, Feb, Mar,...,Dec #month_abb is in "ord" (ordinal) format
+
+
+fe_month
+
+```
 
 
 

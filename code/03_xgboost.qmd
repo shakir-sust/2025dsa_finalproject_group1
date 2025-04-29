@@ -411,6 +411,99 @@ print(test_metrics)
 
 ```
 
+# Predicted vs Observed plot
+
+The following code chunk will Predicted vs Observed plot.
+
+```{r}
+
+# Predicted vs Observed plot 
+
+metrics <- test_metrics %>%
+  pivot_wider(names_from = .metric, values_from = .estimate) # wide format
+
+ggplot(test_preds_xgb, aes(x = yield, y = .pred)) +
+  geom_abline() +  
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  labs(
+    title = "XGBoost: Predicted vs Observed Yield",
+    subtitle = paste0("R² = ", round(metrics$rsq, 3),
+                      "   RMSE = ", round(metrics$rmse, 3)),
+    x = "Observed Yield",
+    y = "Predicted Yield"
+  ) +
+  theme_minimal()
+
+
+```
+
+The following code chunk will export "test_preds_xgb" as "test_preds_xgb.csv".
+
+```{r}
+
+write_csv(test_preds_xgb,
+          "../data/test_preds_xgb.csv")
+
+```
+
+# Variable importance plot
+
+The following code chunk will create Variable importance plot. 
+
+```{r}
+
+library(vip)
+library(ggplot2)
+library(forcats)
+library(dplyr)
+
+# Extracting the fitted xgboost model from your workflow
+wf_fit <- pull_workflow_fit(final_xgb_fit)$fit
+
+# Computing all variable‐importance scores
+vi_df <- vi(wf_fit)
+
+# Selecting the top 20 by absolute importance
+vi_top20 <- vi_df %>%
+  slice_max(order_by = Importance, n = 20)
+
+# Plotting with ggplot2
+ggplot(vi_top20, aes(
+    x = Importance,
+    y = fct_reorder(Variable, Importance)
+  )) +
+  geom_col() +
+  labs(
+    title = "XGBoost Variable Importance",
+    x     = "Importance",
+    y     = "Feature"
+  ) +
+  theme_minimal()
+
+
+```
+
+The following code chunk will export "final_xgb_fit" as "final_xgb_fit.rds".
+
+```{r}
+
+readr::write_rds(
+  final_xgb_fit,
+  file     = "../data/final_xgb_fit.rds",
+  compress = "gz"
+)
+          
+```
+
+The following code chunk will export "vi_top20" as "vi_top20.csv".
+
+```{r}
+
+write_csv(vi_top20,
+          "../data/vi_top20.csv")
+
+```
 
 
 

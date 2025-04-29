@@ -261,6 +261,16 @@ merged_all
 ```
 
 
+## EDA for cleaned merged data
+
+The following code chunk will conduct EDA on the merged data.
+
+```{r}
+
+summary(merged_all)
+
+```
+
 
 
 

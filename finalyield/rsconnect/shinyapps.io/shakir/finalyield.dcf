@@ -1,0 +1,12 @@
+name: finalyield
+title: finalyield
+username: shakir
+account: shakir
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14639232
+bundleId: 10200615
+url: https://shakir.shinyapps.io/finalyield/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

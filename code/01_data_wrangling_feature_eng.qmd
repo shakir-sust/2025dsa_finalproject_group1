@@ -539,7 +539,57 @@ fe_month %>%
 ```
 
 
+The code below will put the month as part of the column names for weather variables. 
 
+
+```{r fe_month_sum_wide}
+
+fe_month_sum_wide <- fe_month_sum %>%
+  pivot_longer(cols = mean_dayl.s:sum_prcp.mm) %>% 
+  mutate(varname = paste0(name, "_", month_abb)) %>% 
+  dplyr::select(-name, -month_abb) %>% 
+  pivot_wider(names_from = varname,
+              values_from = value) %>%
+  # Rounding to one decimal point
+  mutate(across(c(4:9), ~round(., 1) )) 
+
+View(fe_month_sum_wide)  
+
+```
+
+
+The following code chunk will export the "fe_month_sum_wide.csv" file.
+
+```{r}
+
+write_csv(fe_month_sum_wide,
+           "../data/fe_month_sum_wide.csv")
+
+```
+
+The following code chunk will merge "fe_month_sum_wide" with "merged_all".
+
+```{r}
+
+
+merged_full <- merged_all %>%
+  left_join(fe_month_sum_wide, by = c("year","site"))
+
+View(merged_full)
+
+
+```
+
+# Exporting feature engineered dataset
+
+The following code chunk will export the feature engineered data file as .csv in the local disk, which we will use in our further data analysis.
+
+```{r}
+
+write_csv(merged_full,
+           "../data/weather_monthsum.csv")
+
+```
 
 
 

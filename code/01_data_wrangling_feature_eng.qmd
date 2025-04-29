@@ -144,5 +144,24 @@ soil_clean <- soil_df %>%
 soil_clean
 ```
 
+The following code chunks will conduct data wrangling on  "soil_test_clean"
+
+```{r}
+
+soil_test_clean <- soil_test %>%
+  mutate(
+    # 1) remove all lowercase letters
+    site = str_remove_all(site, "[a-z]"),
+    # 2) keep only text before any dash
+    site = str_replace(site, "-.*$", ""),
+    # 3) keep only text before any underscore
+    site = str_replace(site, "_.*$", "")
+  ) %>%
+  ungroup()
+
+soil_test_clean
+
+```
+
 
 

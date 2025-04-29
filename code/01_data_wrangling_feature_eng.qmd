@@ -271,6 +271,54 @@ summary(merged_all)
 
 ```
 
+ Open Source Daymet weather data download
+
+The following code chunk will load necessary packages.  
+
+```{r Setup, message=F, warning=F}
+
+# Installing packages
+
+#install.packages("tidyverse")
+#install.packages("sf") #to manipulate vector geospatial files
+#install.packages("daymetr") #to retrieve data from daymet database website through R
+#install.packages("remotes") #to install R packages that are not available on CRAN, and available on GitHub
+#remotes::install_github("ropensci/USAboundaries") 
+#remotes::install_github("ropensci/USAboundariesData")
+
+# Loading packages
+
+library(tidyverse) #need to load "tidyverse" package at first
+library(sf) # for US map #to manipulate vector geo-spatial points
+library(daymetr) #to retrieve data from daymet database website through R
+library(remotes)
+library(USAboundaries) # for US state boundaries
+library(USAboundariesData)
+
+```
+
+
+The following code chunk will create a map of the USA and plot the sites in the map based on their latitude and longitude.
+
+
+```{r create map of USA and add points, message=F, warning=F}
+
+states <- us_states() %>% 
+  filter( !(state_abbr %in% c("PR", "AK", "HI")) ) #to remove "PR" (Puerto Rico), "AK" (Alaska), and "HI" (Hawaii)
+  
+ggplot() +
+  geom_sf(data = states) + #"geom_sf()" is used to plot "sf" object, which we just created above as "states" object; plots all states and territories of USA
+  geom_point(data = merged_all,
+             aes(x = lon, #"Longitude" goes on longitude
+                 y = lat) #"Latitude" goes on latitude
+             ) +
+  labs(
+    title = "Corn Trial Site Locations (2014–2023)",
+    x     = "Longitude",
+    y     = "Latitude"
+  )
+
+```
 
 
 

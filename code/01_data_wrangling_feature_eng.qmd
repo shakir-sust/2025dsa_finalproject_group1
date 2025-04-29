@@ -163,5 +163,30 @@ soil_test_clean
 
 ```
 
+The following code chunks will conduct data wrangling on  "training_meta.csv".
 
+```{r clean_meta_sites}
+
+meta_clean <- meta_df %>%
+  rename(
+    lon = longitude,
+    lat = latitude
+  ) %>%
+  mutate(
+    # 1) remove all lowercase letters
+    site = str_remove_all(site, "[a-z]"),
+    # 2) keep only text before any dash
+    site = str_replace(site, "-.*$", ""),
+    # 3) keep only text before any underscore
+    site = str_replace(site, "_.*$", "")
+  ) %>%
+  distinct(year, site, .keep_all = TRUE) %>%
+  select(-previous_crop) %>%
+  clean_names() %>%
+  ungroup() 
+  
+
+meta_clean
+
+```
 

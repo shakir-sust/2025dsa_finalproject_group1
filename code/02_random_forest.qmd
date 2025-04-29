@@ -283,7 +283,36 @@ pred_2024_w
 ```
  
  
- 
+ #4.Visualization - observ/pred, VIP plot etc.
+
+```{r observed vs predicted}
+# Plotting Predicted vs Observed Yield for the test set
+ggplot(test_preds, aes(x = yield, y = .pred)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(
+    title = "Predicted vs Observed Yield",
+    x = "Observed Yield (Mg/ha)",
+    y = "Predicted Yield (Mg/ha)"
+  ) +
+  theme_minimal()
+
+```
+
+
+```{r VIP plot}
+# Variable Importance Plot from the final fitted model
+library(vip)
+
+# Extract the fitted ranger model from final_rf_fit
+rf_model <- extract_fit_parsnip(final_rf_fit)$fit
+
+# Generate variable importance plot
+vip(rf_model, num_features = 20) +
+  labs(title = "Variable Importance from Random Forest")
+
+```
+
  
  
  

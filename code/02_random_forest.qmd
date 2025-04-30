@@ -236,7 +236,7 @@ beepr::beep()
 
 The following code chunk will select best hyperparameters.
 
- ```{r rmse based best model}
+```{r rmse based best model}
 # Selecting the best hyperparameters by RMSE
 best_params <- rf_tune_res %>% 
   select_by_pct_loss("trees",

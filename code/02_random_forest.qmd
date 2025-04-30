@@ -339,10 +339,10 @@ The following code chunk will sort the columns in our predicted 2024 yields insi
 
 ```{r}
 
-pred_2024_final <- read.csv("../output/rf_predicted_2024_yields.csv") 
+#pred_2024_final <- read.csv("../output/rf_predicted_2024_yields.csv") 
 test_submission <- read.csv("../data/testing/testing_submission.csv")
 
-pred_2024_filtered <- pred_2024_final %>%
+pred_2024_filtered <- pred_2024_w %>%
   distinct(year, site, hybrid, .keep_all = TRUE) %>%
   semi_join(test_submission, by = c("year", "site", "hybrid"))
 

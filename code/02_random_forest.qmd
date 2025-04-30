@@ -72,6 +72,8 @@ weather_rf
 
 ## 1. Pre-processing  
 
+The following code chunk will split off 2024 for final prediction. 
+
 ```{r}
 # Splitting data between known (2014-2023) and unknown (2024) containing  NA as yield values for future prediction
 weather_to_predict <- weather_rf %>% filter(is.na(yield)) #prediction
@@ -81,6 +83,7 @@ weather_complete     <- weather_rf %>% filter(!is.na(yield))
 
 ## a. Data split  
 
+The following code chunk will conduct train/test split for the data of the years 2014–2023.
 
 ```{r}
 # Initial data split (70/30) on the known data (2014-2023)
@@ -184,15 +187,19 @@ rf_spec
 
 ```
 
+# Bundle recipe & model into workflow
+
+The following code chunk will bundle recipe & model into workflow.
+
 ```{r}
-# 5. Bundle into a workflow
+# Bundling into a workflow
 library(workflows)
 rf_wf <- workflow() %>%
-  add_recipe(weather_recipe_rf) %>%
-  add_model(rf_spec)
+  add_recipe(weather_recipe_rf) %>% # adding preprocessing
+  add_model(rf_spec) # adding XGBoost spec
 ```
 
- ###b. Hyperparameter tuning
+# Hyperparameter tuning
 
 The following code chunk will conduct 3-fold cross-validation to evaluate model performance during tuning.
 
@@ -206,10 +213,11 @@ resamples_rf$splits[[1]]
 resamples_rf$splits[[2]]
 ```
 
+# Hyperparameter grid search with simulated annealing
 
+The following code chunk will conduct hyperparameter grid search with simulated annealing
 
-
-```{r simulate annealing}
+```{r simulated annealing}
 # Tuning with simulated annealing (3 because of limited time and computational power)
 library(finetune)
 set.seed(76544)
@@ -224,6 +232,9 @@ rf_tune_res <- tune_sim_anneal(
 beepr::beep() 
 ```
 
+# Selecting best hyperparameters
+
+The following code chunk will select best hyperparameters.
 
  ```{r rmse based best model}
 # Selecting the best hyperparameters by RMSE
@@ -234,9 +245,9 @@ best_params <- rf_tune_res %>%
 
 ```
 
+# Finalizing workflow & fitting full training set
 
-
-
+The following code chunk will finalize workflow & fit full training set.
 
 ```{r workflow finalizaiton}
 # Finalizing the workflow
@@ -246,7 +257,9 @@ final_rf_wf <- finalize_workflow(rf_wf, best_params)
 final_rf_fit <- fit(final_rf_wf, data = weather_train_rf)
 ```
 
+# Evaluation on held-out test set 
 
+The following code chunk will conduct evaluation on the held-out test set.
 
 ```{r}
 # Evaluating on the held‐out test set (30% of the data split)
@@ -260,8 +273,9 @@ test_preds %>%
   )
 ```
 
- 
- ##3. Prediction
+# Prediction
+
+The following code chunk will conduct predictioin for the 2024 rows.
 
 ```{r}
 
@@ -283,7 +297,9 @@ pred_2024_w
 ```
  
  
- #4.Visualization - observ/pred, VIP plot etc.
+# Predicted vs Observed plot
+
+The following code chunk will create Predicted vs Observed plot.
 
 ```{r observed vs predicted}
 # Plotting Predicted vs Observed Yield for the test set
@@ -299,22 +315,28 @@ ggplot(test_preds, aes(x = yield, y = .pred)) +
 
 ```
 
+# Variable importance plot
+
+The following code chunk will create variable importance plot. 
 
 ```{r VIP plot}
 # Variable Importance Plot from the final fitted model
 library(vip)
 
-# Extract the fitted ranger model from final_rf_fit
+# Extracting the fitted ranger model from final_rf_fit
 rf_model <- extract_fit_parsnip(final_rf_fit)$fit
 
-# Generate variable importance plot
+# Generating variable importance plot
 vip(rf_model, num_features = 20) +
   labs(title = "Variable Importance from Random Forest")
 
 ```
 
  
-##5. Combining with submission
+# Combining with submission
+
+The following code chunk will sort the columns in our predicted 2024 yields inside "pred_2024_final" based on the "testing_submission".
+
 ```{r}
 
 pred_2024_final <- read.csv("../output/rf_predicted_2024_yields.csv") 
